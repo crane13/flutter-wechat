@@ -162,6 +162,50 @@
 
       request.message = mediaMessage;
     }
+    // Sharing miniprogram
+    else if ([@"miniprogram" isEqualToString:kind]) {
+//      NSString *coverUrl = arguments[@"coverUrl"];
+//      NSString *url = arguments[@"url"];
+//      NSString *title = arguments[@"title"];
+//      NSString *description = arguments[@"description"];
+//
+//      NSData* coverImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:coverUrl]];
+//
+//      WXWebpageObject *mediaObject = [WXWebpageObject object];
+//      mediaObject.webpageUrl = url;
+//
+//      WXMediaMessage *mediaMessage = [WXMediaMessage message];
+//      mediaMessage.title = title;
+//      mediaMessage.description = description;
+//      mediaMessage.mediaObject = mediaObject;
+//      [mediaMessage setThumbImage:[UIImage imageWithData:coverImageData]];
+//
+//      request.message = mediaMessage;
+        
+        NSString *coverUrl = arguments[@"coverUrl"];
+
+        NSData* coverImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:coverUrl]];
+        
+        WXMiniProgramObject *object = [WXMiniProgramObject object];
+        object.webpageUrl = arguments[@"url"];
+        object.userName = arguments[@"mina_id"];
+        object.path = arguments[@"mina_path"];
+        object.hdImageData = coverImageData;
+//        object.withShareTicket = withShareTicket;
+        object.miniProgramType = WXMiniProgramTypeRelease;
+        
+        WXMediaMessage *message = [WXMediaMessage message];
+        message.title = arguments[@"title"];
+        message.description = arguments[@"description"];
+        message.thumbData = coverImageData;  //兼容旧版本节点的图片，小于32KB，新版本优先
+        //使用WXMiniProgramObject的hdImageData属性
+        message.mediaObject = object;
+        
+        SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+        request.bText = NO;
+        request.message = message;
+        request.scene = WXSceneSession;  //目前只支持会话
+    }
     [WXApi sendReq:request];
   }
 
