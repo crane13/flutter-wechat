@@ -307,7 +307,7 @@ public class WechatPlugin implements MethodCallHandler {
               Message osMessage = new Message();
               bitmap = GetBitmap(coverUrl);
               bitmap = ImageUtils.convertBitmapTo5x4(bitmap, THUMB_SIZE_MINIPROGRAM,
-                      THUMB_SIZE_MINIPROGRAM * 4 / 5)
+                      THUMB_SIZE_MINIPROGRAM * 4 / 5);
               osMessage.what = 4;
               handler.sendMessage(osMessage);
             }
