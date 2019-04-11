@@ -47,7 +47,7 @@ import java.net.URL;
 
 /** WechatPlugin */
 public class WechatPlugin implements MethodCallHandler {
-
+  private static final int THUMB_SIZE_MINIPROGRAM = 350;
   private static int code;//返回错误吗
   private static String loginCode;//获取access_code
   private static IWXAPI api;
@@ -118,6 +118,11 @@ public class WechatPlugin implements MethodCallHandler {
           api.sendReq(request);
           break;
         case 3:
+          request.transaction = String.valueOf(System.currentTimeMillis());
+          request.message = message;
+          api.sendReq(request);
+          break;
+        case 4:
           request.transaction = String.valueOf(System.currentTimeMillis());
           request.message = message;
           api.sendReq(request);
@@ -254,6 +259,41 @@ public class WechatPlugin implements MethodCallHandler {
             }
           }.start();
           break;
+        case "miniprogram":
+          WXMiniProgramObject miniProgramObj = new WXMiniProgramObject();
+          miniProgramObj.webpageUrl = call.argument("url").toString(); // 兼容低版本的网页链接
+          miniProgramObj.miniprogramType = WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE;// 正式版:0，测试版:1，体验版:2
+          miniProgramObj.userName = call.argument("mina_id").toString();     // 小程序原始id
+          miniProgramObj.path = call.argument("mina_path").toString();            //小程序页面路径
+          message = new WXMediaMessage(miniProgramObj);
+          message.title = call.argument("mina_title").toString();                    // 小程序消息title
+          message.description = call.argument("mina_path").toString();               // 小程序消息desc
+
+
+
+//          SendMessageToWX.Req req = new SendMessageToWX.Req();
+//          req.transaction = String.valueOf(System.currentTimeMillis());
+//          req.message = msg;
+//          req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前支持会话
+
+//          WXMiniProgramObject webpageObject = new WXMiniProgramObject();
+//          webpageObject.webpageUrl = call.argument("url").toString();
+//          message = new WXMediaMessage();
+//          message.mediaObject = webpageObject;
+//          message.title = call.argument("title").toString();
+//          message.description = call.argument("description").toString();
+          //网络图片或者本地图片
+          new Thread() {
+            public void run() {
+              Message osMessage = new Message();
+              bitmap = GetBitmap(coverUrl);
+              bitmap = ImageUtils.convertBitmapTo5x4(bitmap, THUMB_SIZE_MINIPROGRAM,
+                      THUMB_SIZE_MINIPROGRAM * 4 / 5)
+              osMessage.what = 4;
+              handler.sendMessage(osMessage);
+            }
+          }.start();
+          break;
       }
     }
     else if (call.method.equals("login")) {
@@ -349,4 +389,72 @@ public class WechatPlugin implements MethodCallHandler {
       }
     };
   }
+
+  // for share miniprogram
+  public static Bitmap convertBitmapTo5x4(Bitmap bitmap,int w,int h) {
+    try {
+      Bitmap output = Bitmap.createBitmap(w,
+              h, Config.ARGB_8888);
+      Canvas canvas = new Canvas(output);
+
+      Rect src = new Rect(0 , 0, (w * bitmap.getHeight() / h) ,
+              bitmap.getHeight());
+      Rect dst = new Rect(0, 0, w, h);
+
+      if (w * bitmap.getHeight() >= h * bitmap.getWidth())
+      {
+        src = new Rect(0, (bitmap.getHeight() - bitmap.getWidth() * h / w) / 2,
+                bitmap.getWidth(), (bitmap.getHeight() + bitmap.getWidth() * h / w) / 2);
+
+//				dst = new Rect(0, 0, bitmap.getWidth(), w * bitmap.getHeight() / h);
+      } else
+      {
+        src = new Rect((bitmap.getWidth() - bitmap.getHeight() * w / h) / 2, 0,
+                (bitmap.getWidth() + bitmap.getHeight() * w / h) / 2, bitmap.getHeight());
+
+//                dst = new Rect(0, 0, h * bitmap.getWidth() / w, bitmap.getHeight());
+      }
+
+
+      final int color = 0xff424242;
+      final Paint paint = new Paint();
+//			final Rect rect = new Rect(0, 0, bitmap.getWidth(),
+//					bitmap.getHeight());
+      final RectF rectF = new RectF(dst);
+//			final float roundPx = Math.min(w ,h)/ 10;
+      final float roundPx = 4 * BaseApp.fDensity;
+
+      paint.setAntiAlias(true);
+//            canvas.drawARGB(0, 0, 0, 0);
+//            paint.setColor(color);
+
+//            canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+
+//			RectF rectBottom = new RectF(0,rectF.top-20,rectF.right,rectF.bottom);
+//			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_OVER));
+//			canvas.drawRect(rectBottom,paint);
+
+      Log.v(TAG, "roundPx:" + roundPx);
+//            paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+
+      canvas.drawBitmap(bitmap, src, dst, paint);
+//			canvas.drawBitmap(bitmap, rect, rect, paint);
+      Log.v(TAG, "convertToRoundRect success");
+//            bitmap.recycle();
+      SoftReference<Bitmap> d = new SoftReference<Bitmap>(output);
+      return d.get();
+//            return output;
+    } catch (Exception e)
+    {
+      Log.v(TAG, "convertToRoundRect fail :" + e.toString());
+      e.printStackTrace();
+    } catch (OutOfMemoryError e)
+    {
+      Log.v(TAG, "convertToRoundRect fail :" + e.toString());
+      e.printStackTrace();
+    }
+    return bitmap;
+  }
+
 }
