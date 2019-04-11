@@ -27,6 +27,7 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
 import com.tencent.mm.opensdk.modelmsg.WXMusicObject;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXVideoObject;
@@ -307,7 +308,7 @@ public class WechatPlugin implements MethodCallHandler {
             public void run() {
               Message osMessage = new Message();
               bitmap = GetBitmap(coverUrl);
-              bitmap = ImageUtils.convertBitmapTo5x4(bitmap, THUMB_SIZE_MINIPROGRAM,
+              bitmap = convertBitmapTo5x4(bitmap, THUMB_SIZE_MINIPROGRAM,
                       THUMB_SIZE_MINIPROGRAM * 4 / 5);
               osMessage.what = 4;
               handler.sendMessage(osMessage);
@@ -442,7 +443,7 @@ public class WechatPlugin implements MethodCallHandler {
 //					bitmap.getHeight());
       final RectF rectF = new RectF(dst);
 //			final float roundPx = Math.min(w ,h)/ 10;
-      final float roundPx = 4 * BaseApp.fDensity;
+      final float roundPx = 4 * 0;
 
       paint.setAntiAlias(true);
 //            canvas.drawARGB(0, 0, 0, 0);
