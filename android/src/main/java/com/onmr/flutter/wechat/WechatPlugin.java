@@ -287,8 +287,8 @@ public class WechatPlugin implements MethodCallHandler {
           miniProgramObj.userName = call.argument("mina_id").toString();     // 小程序原始id
           miniProgramObj.path = call.argument("mina_path").toString();            //小程序页面路径
           message = new WXMediaMessage(miniProgramObj);
-          message.title = call.argument("mina_title").toString();                    // 小程序消息title
-          message.description = call.argument("mina_path").toString();               // 小程序消息desc
+          message.title = call.argument("title").toString();                    // 小程序消息title
+          message.description = call.argument("description").toString();               // 小程序消息desc
 
 
 
