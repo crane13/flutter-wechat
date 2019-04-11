@@ -45,6 +45,25 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.lang.ref.SoftReference;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.lang.OutOfMemoryError;
+
 /** WechatPlugin */
 public class WechatPlugin implements MethodCallHandler {
   private static final int THUMB_SIZE_MINIPROGRAM = 350;
