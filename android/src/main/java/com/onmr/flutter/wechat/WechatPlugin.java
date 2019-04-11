@@ -66,6 +66,7 @@ import java.lang.OutOfMemoryError;
 
 /** WechatPlugin */
 public class WechatPlugin implements MethodCallHandler {
+  public static final String TAG = "WechatPlugin";
   private static final int THUMB_SIZE_MINIPROGRAM = 350;
   private static int code;//返回错误吗
   private static String loginCode;//获取access_code
