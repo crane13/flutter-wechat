@@ -164,24 +164,6 @@
     }
     // Sharing miniprogram
     else if ([@"miniprogram" isEqualToString:kind]) {
-//      NSString *coverUrl = arguments[@"coverUrl"];
-//      NSString *url = arguments[@"url"];
-//      NSString *title = arguments[@"title"];
-//      NSString *description = arguments[@"description"];
-//
-//      NSData* coverImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:coverUrl]];
-//
-//      WXWebpageObject *mediaObject = [WXWebpageObject object];
-//      mediaObject.webpageUrl = url;
-//
-//      WXMediaMessage *mediaMessage = [WXMediaMessage message];
-//      mediaMessage.title = title;
-//      mediaMessage.description = description;
-//      mediaMessage.mediaObject = mediaObject;
-//      [mediaMessage setThumbImage:[UIImage imageWithData:coverImageData]];
-//
-//      request.message = mediaMessage;
-        
         NSString *coverUrl = arguments[@"coverUrl"];
 
         NSData* coverImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:coverUrl]];
@@ -205,6 +187,14 @@
         request.bText = NO;
         request.message = message;
         request.scene = WXSceneSession;  //目前只支持会话
+    }else if([@"openminiprogram" isEqualToString:kind])
+    {
+        WXLaunchMiniProgramReq *launchMiniProgramReq = [WXLaunchMiniProgramReq object];
+        launchMiniProgramReq.userName = arguments[@"mina_id"];  //拉起的小程序的username
+        launchMiniProgramReq.path = arguments[@"mina_path"];    //拉起小程序页面的可带参路径，不填默认拉起小程序首页
+        launchMiniProgramReq.miniProgramType = miniProgramType; //拉起小程序的类型
+        [WXApi sendReq:launchMiniProgramReq];
+        return;
     }
     [WXApi sendReq:request];
   }
