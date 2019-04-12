@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -290,19 +291,6 @@ public class WechatPlugin implements MethodCallHandler {
           message.title = call.argument("title").toString();                    // 小程序消息title
           message.description = call.argument("description").toString();               // 小程序消息desc
 
-
-
-//          SendMessageToWX.Req req = new SendMessageToWX.Req();
-//          req.transaction = String.valueOf(System.currentTimeMillis());
-//          req.message = msg;
-//          req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前支持会话
-
-//          WXMiniProgramObject webpageObject = new WXMiniProgramObject();
-//          webpageObject.webpageUrl = call.argument("url").toString();
-//          message = new WXMediaMessage();
-//          message.mediaObject = webpageObject;
-//          message.title = call.argument("title").toString();
-//          message.description = call.argument("description").toString();
           //网络图片或者本地图片
           new Thread() {
             public void run() {
@@ -314,6 +302,14 @@ public class WechatPlugin implements MethodCallHandler {
               handler.sendMessage(osMessage);
             }
           }.start();
+          break;
+        case "openminiprogram":
+
+          WXLaunchMiniProgram.Req req = new WXLaunchMiniProgram.Req();
+          req.userName = call.argument("mina_id").toString(); // 填小程序原始id
+          req.path = call.argument("mina_path").toString();                  //拉起小程序页面的可带参路径，不填默认拉起小程序首页
+          req.miniprogramType = WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE;// 可选打开 开发版，体验版和正式版
+          api.sendReq(req);
           break;
       }
     }
