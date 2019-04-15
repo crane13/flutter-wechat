@@ -9,6 +9,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +17,12 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.URLUtil;
 import android.widget.Toast;
 
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -258,7 +262,13 @@ public class WechatPlugin implements MethodCallHandler {
           new Thread() {
             public void run() {
               Message osMessage = new Message();
-              bitmap = GetBitmap(imageResourceUrl);
+              if(URLUtil.isValidUrl(imageResourceUrl))
+              {
+                bitmap = GetBitmap(imageResourceUrl);
+              }else {
+                bitmap = GetLocalBitmap(context, imageResourceUrl);
+              }
+
               osMessage.what = 1;
               handler.sendMessage(osMessage);
             }
@@ -363,20 +373,29 @@ public class WechatPlugin implements MethodCallHandler {
     }
   }
 
+  public Bitmap GetLocalBitmap(Context context, String path)
+  {
+    if(!TextUtils.isEmpty(path) && context instanceof Activity)
+    {
+      return ImageUtils.getPhoto((Activity) context, Uri.parse(path));
+    }
+    return null;
+  }
+
   public byte[] convertBitmapToByteArray(final Bitmap bitmap, final boolean needRecycle) {
     ByteArrayOutputStream output = new ByteArrayOutputStream();
 		bitmap.compress(CompressFormat.PNG, 100, output);
 		if (needRecycle) {
 			bitmap.recycle();
 		}
-		
+
 		byte[] result = output.toByteArray();
 		try {
 			output.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
   }
 
