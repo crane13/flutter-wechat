@@ -85,6 +85,7 @@ public class WechatPlugin implements MethodCallHandler {
   private String kind = "session";
   private final PluginRegistry.Registrar registrar;
   private BroadcastReceiver sendRespReceiver;
+  private String to = "session";
 
   private WechatPlugin(Context ctx, Registrar registrar) {
     this.registrar = registrar;
@@ -111,9 +112,9 @@ public class WechatPlugin implements MethodCallHandler {
     @Override
     public boolean handleMessage(Message osMessage) {
       SendMessageToWX.Req request = new SendMessageToWX.Req();
-      request.scene = kind.equals("timeline")
+      request.scene = to.equals("timeline")
         ? SendMessageToWX.Req.WXSceneTimeline
-        : kind.equals("favorite")
+        : to.equals("favorite")
           ? SendMessageToWX.Req.WXSceneFavorite
           : SendMessageToWX.Req.WXSceneSession;
 
@@ -195,6 +196,7 @@ public class WechatPlugin implements MethodCallHandler {
     }
     else if (call.method.equals("share")) {
         this.kind = call.argument("kind");
+        this.to = call.argument("to");
       final String kind = this.kind;
       final String to = call.argument("to");
       final String coverUrl = call.argument("coverUrl");
