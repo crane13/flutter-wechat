@@ -194,16 +194,17 @@ public class WechatPlugin implements MethodCallHandler {
       result.success(api.openWXApp());
     }
     else if (call.method.equals("share")) {
-      final String kind = call.argument("kind");
+        this.kind = call.argument("kind");
+      final String kind = this.kind;
       final String to = call.argument("to");
       final String coverUrl = call.argument("coverUrl");
       SendMessageToWX.Req request = new SendMessageToWX.Req();
       message = new WXMediaMessage();
       request.scene = to.equals("timeline")
-        ? SendMessageToWX.Req.WXSceneTimeline
-        : to.equals("favorite")
-          ? SendMessageToWX.Req.WXSceneFavorite
-          : SendMessageToWX.Req.WXSceneSession;
+              ? SendMessageToWX.Req.WXSceneTimeline
+              : to.equals("favorite")
+              ? SendMessageToWX.Req.WXSceneFavorite
+              : SendMessageToWX.Req.WXSceneSession;
       switch (kind) {
         case "text":
           WXTextObject textObject = new WXTextObject();
