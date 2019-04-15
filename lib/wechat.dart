@@ -29,7 +29,8 @@ class Wechat {
     var result = await _channel.invokeMethod(
       'isWechatInstalled'
     );
-    return result == 'true' ? true : false;
+    return result;
+//    return result == 'true' ? true : false;
   }
 
   /// Get wechat sdk api version.
