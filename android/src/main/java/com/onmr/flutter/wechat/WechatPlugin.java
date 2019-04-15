@@ -375,11 +375,13 @@ public class WechatPlugin implements MethodCallHandler {
 
   public Bitmap GetLocalBitmap(Context context, String path)
   {
-    if(!TextUtils.isEmpty(path) && context instanceof Activity)
-    {
-      return ImageUtils.getPhoto((Activity) context, Uri.parse(path));
-    }
-    return null;
+//    if(!TextUtils.isEmpty(path) && (context instanceof Activity))
+//    {
+//        return BitmapFactory.decodeFile(path);
+////      return ImageUtils.getPhoto((Activity) context, Uri.parse(path));
+//    }
+//    return null;
+        return BitmapFactory.decodeFile(path);
   }
 
   public byte[] convertBitmapToByteArray(final Bitmap bitmap, final boolean needRecycle) {
