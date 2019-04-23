@@ -39,7 +39,8 @@
   }
 
   else if ([@"isWechatInstalled" isEqualToString:call.method]) {
-    BOOL installed = [WXApi isWXAppInstalled];
+//    BOOL installed = [WXApi isWXAppInstalled];
+    BOOL installed = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
     result([NSString stringWithFormat:@"%@", installed ? @"true" : @"false"]);
   }
 
