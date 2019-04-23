@@ -88,9 +88,13 @@
       // Image imageUrl
       NSString *resourceUrl = arguments[@"resourceUrl"];
 
+       // NSData * imgData =[NSData dataWithContentsOfFile:path];
+        UIImage * image = [[UIImage alloc]initWithContentsOfFile:resourceUrl];
+
       WXMediaMessage *mediaMessage = [WXMediaMessage message];
       WXImageObject *imageObject = [WXImageObject object];
-      imageObject.imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:resourceUrl]];
+     // imageObject.imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:resourceUrl]];
+      imageObject.imageData = UIImageJPEGRepresentation(image, 0.7);
       mediaMessage.mediaObject = imageObject;
   
       request.message = mediaMessage;
