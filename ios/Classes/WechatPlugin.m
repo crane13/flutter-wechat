@@ -198,8 +198,8 @@
         launchMiniProgramReq.userName = arguments[@"mina_id"];  //拉起的小程序的username
         launchMiniProgramReq.path = arguments[@"mina_path"];    //拉起小程序页面的可带参路径，不填默认拉起小程序首页
         
-//        launchMiniProgramReq.miniProgramType = WXMiniProgramTypePreview; //拉起小程序的类型
-        launchMiniProgramReq.miniProgramType = arguments[@"miniProgramType"]; //拉起小程序的类型
+        launchMiniProgramReq.miniProgramType = WXMiniProgramTypePreview; //拉起小程序的类型
+//        launchMiniProgramReq.miniProgramType = arguments[@"miniProgramType"]; //拉起小程序的类型
         [WXApi sendReq:launchMiniProgramReq];
         return;
     }
