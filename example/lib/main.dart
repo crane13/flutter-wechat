@@ -97,6 +97,32 @@ class _MyAppState extends State<MyApp> {
       'description': 'Children\'s Christmas Favorites-Jingle Bells (Album Version)'
     });
   }
+  void _shareMiniprogram ([String to = 'session']) async {
+    _share({
+      'kind': 'miniprogram',
+      'to': 'session',
+      'url': 'https://github.com/cranedev123/cookbook',
+      'coverUrl': 'https://pantao.onmr.com/usr/uploads/2018/12/2293691504.jpg',
+      'mina_id': 'gh_f99289495b73',
+      'mina_path': '/pages/mainpage/MainPage?id=110',
+      'title': 'sdkjfhs',
+      'description': 'sdsdsd'
+    });
+  }
+  void openMiniProgram() async {
+    _share({
+      'kind': 'openminiprogram',
+      'to': 'session',
+      'url': 'https://github.com/cranedev123/cookbook',
+      'coverUrl': '',
+      'mina_id': 'gh_f99289495b73',
+      'mina_path': '/pages/mainpage/MainPage?id=1655',
+      'title': '',
+      'miniProgramType': '1',
+      'description': ''
+    });
+  }
+
 
   void _login () async {
     var result = await Wechat.login({
@@ -163,6 +189,20 @@ class _MyAppState extends State<MyApp> {
               title: Text('Share webpage to wechat'),
               onTap: () {
                 _shareWebpage();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.web),
+              title: Text('Share miniprogram to wechat'),
+              onTap: () {
+                _shareMiniprogram();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.web),
+              title: Text('open miniprogram to wechat'),
+              onTap: () {
+                openMiniProgram();
               },
             ),
             ListTile(
