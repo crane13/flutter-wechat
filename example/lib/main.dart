@@ -14,14 +14,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _result = 'no result';
+  var isInstall;
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
-    Wechat.register('APPID');
+    Wechat.register('wx9731342026063e1d');
     _result = 'no result';
     print('inited');
+
+
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -107,6 +110,13 @@ class _MyAppState extends State<MyApp> {
     var result = await Wechat.openWechat();
   }
 
+  void _isInstall () async {
+    var result = await Wechat.isWechatInstalled();
+    setState(() {
+      isInstall = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -169,7 +179,15 @@ class _MyAppState extends State<MyApp> {
                 _openWechat();
               },
             ),
-            Text('result: $_result')
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('isWechat install : $isInstall'),
+              onTap: () {
+                _isInstall();
+              },
+            ),
+            Text('result: $_result'),
+            Text('isWechat install: $isInstall')
           ],
         ),
       ),
